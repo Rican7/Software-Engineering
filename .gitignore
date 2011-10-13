@@ -1,0 +1,7 @@
+# Ignore These Directories #
+############################
+bin
+
+# Ignore These File Types  #
+############################
+*.apk
