@@ -5,5 +5,11 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@drawable/levelselect">
+    <Button
+    	android:text="Level 1" 
+    	android:id="@+id/level1" 
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content">
+    </Button>
     
 </LinearLayout>
