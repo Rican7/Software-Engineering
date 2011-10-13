@@ -25,10 +25,11 @@ public final class R {
         public static final int splashscreen=0x7f020003;
     }
     public static final class id {
-        public static final int btnhighscores=0x7f060003;
-        public static final int btnplay=0x7f060001;
-        public static final int btnsettings=0x7f060002;
-        public static final int level1=0x7f060000;
+        public static final int btnhighscores=0x7f060004;
+        public static final int btnplay=0x7f060002;
+        public static final int btnsettings=0x7f060003;
+        public static final int level1=0x7f060001;
+        public static final int textView1=0x7f060000;
     }
     public static final class layout {
         public static final int levelselect=0x7f030000;
