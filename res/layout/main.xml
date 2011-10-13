@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/menubackground"
+    >
+<TextView  
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="@string/title"
+    />
+<RelativeLayout
+	android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    --Buttons
+    <LinearLayout
+	    android:orientation="vertical"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content">
+		<Button 
+			android:text="Play" 
+			android:id="@+id/btnplay" 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content">
+		</Button>
+		
+		<Button 
+			android:text="Settings" 
+			android:id="@+id/btnsettings" 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content">
+		</Button>
+		
+		<Button 
+			android:text="HighScores" 
+			android:id="@+id/btnhighscores" 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content">
+		</Button>
+	</LinearLayout>
+</RelativeLayout>    
+</LinearLayout>
