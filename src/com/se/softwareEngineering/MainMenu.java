@@ -14,6 +14,7 @@ public class MainMenu extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		
+		//Play button
 		Button btn_Play = (Button) findViewById (R.id.btnplay);
 		btn_Play.setOnClickListener(new View.OnClickListener() {
 			
@@ -22,7 +23,16 @@ public class MainMenu extends Activity{
 				startActivity(new Intent("com.se.softwareEngineering.LEVELSELECT"));
 			}
 		});
-		 
+		
+		//Settings button
+		Button btn_Settings = (Button) findViewById (R.id.btnsettings);
+		btn_Settings.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 
 }
