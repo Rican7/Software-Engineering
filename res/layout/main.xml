@@ -18,7 +18,7 @@
     <LinearLayout
 	    android:orientation="vertical"
 	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content">
+	    android:layout_height="wrap_content" android:id="@+id/linearLayout1">
 		<Button 
 			android:text="Play" 
 			android:id="@+id/btnplay" 
@@ -39,6 +39,14 @@
 			android:layout_width="wrap_content" 
 			android:layout_height="wrap_content">
 		</Button>
+		<Button android:text="Button" 
+    android:layout_width="wrap_content" 
+    android:layout_height="wrap_content" 
+    android:id="@+id/button1" 
+    android:layout_below="@+id/linearLayout1" 
+    android:layout_alignParentLeft="true">
+    </Button>
 	</LinearLayout>
+    
 </RelativeLayout>    
 </LinearLayout>
