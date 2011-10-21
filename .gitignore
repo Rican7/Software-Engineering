@@ -1,7 +1,10 @@
 # Ignore These Directories #
 ############################
 bin
+gen
 
 # Ignore These File Types  #
 ############################
 *.apk
+Thumbs.db
+thumbs.db

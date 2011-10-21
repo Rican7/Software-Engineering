@@ -16,7 +16,7 @@ public class SoftwareEngineeringActivity extends Activity {
 				try{
 					int splashTimer = 0;
 					
-					while (splashTimer <2000){
+					while (splashTimer <2500){
 						sleep(100);
 						splashTimer = splashTimer + 100;
 						
