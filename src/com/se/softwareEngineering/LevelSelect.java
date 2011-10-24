@@ -10,7 +10,6 @@ public class LevelSelect extends Activity{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.levelselect);
 		
@@ -20,8 +19,7 @@ public class LevelSelect extends Activity{
 		btn_Level1.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				startActivity(new Intent("com.se.softwareEngineering.LEVEL1"));
+				startActivity(new Intent("com.se.softwareEngineering.test2d.Test2D"));
 			}
 		});
 	}
