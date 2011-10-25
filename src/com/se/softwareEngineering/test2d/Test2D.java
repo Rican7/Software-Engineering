@@ -8,6 +8,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.Window;
+import android.view.WindowManager;
 
 public class Test2D extends Activity implements SensorEventListener {
     
@@ -25,6 +26,10 @@ public class Test2D extends Activity implements SensorEventListener {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(new Panel(this));
+        
+        // Keep screen on
+        this.getWindow().
+        addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		
 		// Set sensors
 		aSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
