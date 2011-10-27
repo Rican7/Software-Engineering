@@ -20,8 +20,9 @@
 	    	android:id="@+id/btnlevel1" 
 	    	android:background="@drawable/level1"
 	    	android:gravity="left"
-	    	 android:layout_width="100dp"
-	    	 android:layout_height="100dp">
+	    	android:layout_width="100dp"
+	    	android:layout_height="100dp"
+	    	android:layout_marginLeft="100dp">
 	    </Button>
 	    <Button
 	    	android:id="@+id/btnlevel2" 
@@ -29,7 +30,7 @@
 	    	android:background="@drawable/level2"
 	    	android:layout_width="100dp"
 	    	android:layout_height="100dp"
-	    	android:layout_marginLeft="150dp">
+	    	android:layout_marginLeft="350dp">
 	    </Button>
     </RelativeLayout>
     <LinearLayout

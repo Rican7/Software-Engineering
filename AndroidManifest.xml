@@ -5,6 +5,9 @@
 	<uses-sdk android:minSdkVersion="8" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 
+	<!--
+	TODO: Change theme of app to full screen. "Theme.NoTitleBar.Fullscreen" 
+	-->
 	<application 
 		android:icon="@drawable/icon" 
 		android:theme="@android:style/Theme.NoTitleBar">
@@ -32,6 +35,15 @@
 			</intent-filter>
 		</activity>
 		
+		<activity android:name=".About" android:label="@string/app_name"
+			android:screenOrientation="landscape"
+			android:theme="@android:style/Theme.Dialog">
+			<intent-filter>
+				<action android:name="com.se.softwareEngineering.ABOUT" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>    
+		    
 		<activity android:name=".Level1" android:label="@string/app_name"
 			android:screenOrientation="landscape">
 			<intent-filter>
