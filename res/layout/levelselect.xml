@@ -12,42 +12,63 @@
 	    android:layout_height="wrap_content"
 	    android:layout_gravity="center_horizontal">
 	</TextView>
-	<RelativeLayout
-		android:orientation="horizontal"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
-	    <Button
-	    	android:id="@+id/btnlevel1" 
-	    	android:background="@drawable/level1"
-	    	android:gravity="left"
-	    	android:layout_width="100dp"
-	    	android:layout_height="100dp"
-	    	android:layout_marginLeft="100dp">
-	    </Button>
-	    <Button
-	    	android:id="@+id/btnlevel2" 
-	    	android:gravity="right" 
-	    	android:background="@drawable/level2"
-	    	android:layout_width="100dp"
-	    	android:layout_height="100dp"
-	    	android:layout_marginLeft="350dp">
-	    </Button>
-    </RelativeLayout>
-    <LinearLayout
-		android:orientation="horizontal"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
-	    <Button
-	    	android:text="btnLocked" 
-	    	android:id="@+id/level3" 
-	    	android:layout_width="wrap_content" 
-	    	android:layout_height="wrap_content" android:paddingRight="20dp">
-	    </Button>
-	    <Button
-	    	android:text="Coming Soon" 
-	    	android:id="@+id/btnlevel4" 
-	    	android:layout_width="wrap_content" 
-	    	android:layout_height="wrap_content">
-	    </Button>
-    </LinearLayout>
+	<GridView 
+	    android:id="@+id/gridview"
+	    android:layout_width="fill_parent" 
+	    android:layout_height="fill_parent"
+	    android:columnWidth="90dp"
+	    android:numColumns="auto_fit"
+	    android:verticalSpacing="10dp"
+	    android:horizontalSpacing="10dp"
+	    android:stretchMode="columnWidth"
+	    android:gravity="center"
+	/>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+	<!--<RelativeLayout 
+    	android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:gravity="center">
+
+			    <Button
+			    	android:id="@+id/btnlevel1" 
+			    	android:background="@drawable/level1"
+			    	android:layout_width="100dp"
+					android:layout_height="100dp"
+					
+					>
+			    </Button>
+			    <Button
+			    	android:id="@+id/btnlevel2"  
+			    	android:background="level2Image"
+			    	android:layout_width="100dp"
+					android:layout_height="100dp">
+			    	
+			    </Button>
+	 
+			    <Button
+			    	android:text="btnLocked" 
+			    	android:id="@+id/level3" 
+			    	android:layout_width="100dp"
+					android:layout_height="100dp">
+			    </Button>
+			    <Button
+			    	android:text="Coming Soon" 
+			    	android:id="@+id/btnlevel4"
+			    	android:layout_width="100dp"
+					android:layout_height="100dp">
+			    </Button>
+
+	</RelativeLayout>-->
 </LinearLayout>
+ 

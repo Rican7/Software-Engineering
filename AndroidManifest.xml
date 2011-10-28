@@ -35,6 +35,14 @@
 			</intent-filter>
 		</activity>
 		
+		<activity android:name=".LevelStatistics" android:label="@string/app_name"
+			android:screenOrientation="landscape">
+			<intent-filter>
+				<action android:name="com.se.softwareEngineering.LEVELSTATS" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
+		
 		<activity android:name=".About" android:label="@string/app_name"
 			android:screenOrientation="landscape"
 			android:theme="@android:style/Theme.Dialog">
