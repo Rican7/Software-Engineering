@@ -5,50 +5,46 @@
     android:layout_height="fill_parent"
     android:background="@drawable/menubackground"
     >
-<TextView  
-    android:layout_width="wrap_content" 
-    android:layout_height="wrap_content" 
-    android:text="@string/title"
-    android:layout_gravity="center_horizontal"
-    />
-<RelativeLayout
-	android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    --Buttons
-    <LinearLayout
-	    android:orientation="vertical"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content" android:id="@+id/linearLayout1">
-		<Button 
-			android:text="Play" 
-			android:id="@+id/btnplay" 
-			android:layout_width="wrap_content" 
-			android:layout_height="wrap_content">
-		</Button>
-		
-		<Button 
-			android:text="Settings" 
-			android:id="@+id/btnsettings" 
-			android:layout_width="wrap_content" 
-			android:layout_height="wrap_content">
-		</Button>
-		
-		<Button 
-			android:text="HighScores" 
-			android:id="@+id/btnhighscores" 
-			android:layout_width="wrap_content" 
-			android:layout_height="wrap_content">
-		</Button>
-		<Button 
-		    android:text="About" 
-		    android:layout_width="wrap_content" 
-		    android:layout_height="wrap_content" 
-		    android:id="@+id/btnAbout" 
-		    android:layout_below="@+id/linearLayout1" 
-		    android:layout_alignParentLeft="true">
-    	</Button>
-	</LinearLayout>
-    
-</RelativeLayout>    
+	<TextView  
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content" 
+	    android:text="@string/title"
+	    android:layout_gravity="center_horizontal"
+	/>
+	<RelativeLayout
+		android:orientation="vertical"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent">
+	    --Buttons
+	    <LinearLayout
+		    android:orientation="vertical"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content" android:layout_centerVertical="true">
+			<Button 
+				android:id="@+id/btnplay" 
+				android:layout_width="wrap_content" 
+				android:layout_height="wrap_content" android:background="@drawable/play">
+			</Button>
+			
+			<Button 
+				android:id="@+id/btnsettings" 
+				android:layout_width="wrap_content" 
+				android:layout_height="wrap_content" android:background="@drawable/settings">
+			</Button>
+			
+			<Button 
+				android:id="@+id/btnhighscores" 
+				android:layout_width="wrap_content" 
+				android:layout_height="wrap_content" android:background="@drawable/highscore">
+			</Button>
+			<Button 
+			    android:layout_width="wrap_content" 
+			    android:layout_height="wrap_content" 
+			    android:id="@+id/btnAbout" 
+			    android:layout_below="@+id/linearLayout1" 
+			    android:layout_alignParentLeft="true" android:background="@drawable/aboutus">
+	    	</Button>
+		</LinearLayout>
+	    
+	</RelativeLayout>    
 </LinearLayout>

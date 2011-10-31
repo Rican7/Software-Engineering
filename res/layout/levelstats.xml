@@ -4,23 +4,23 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/menubackground">
-	<TextView  
-	    android:layout_width="wrap_content" 
-	    android:layout_height="wrap_content" 
-	    android:text="Level Statistics"
-	    android:layout_gravity="center_horizontal"
-    />
+	
 	<RelativeLayout
 	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
+	    android:layout_height="wrap_content"
 	    android:orientation="vertical">
+	    <TextView  
+		    android:layout_width="wrap_content" 
+		    android:layout_height="wrap_content" 
+		    android:text="Level Statistics" 
+		    android:layout_centerVertical="true" 
+		    android:layout_centerHorizontal="true"/>
 	    <Button 
 			android:id="@+id/btnPlayFinal" 
 			
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Play" 
-			android:layout_alignParentRight="true">
+			android:layout_alignParentRight="true" android:background="@drawable/play">
 			
 		</Button>
 		
@@ -28,9 +28,8 @@
 			android:id="@+id/btnBack" 
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Back"
 			android:layout_alignParentLeft="true" 
-		>
+		android:background="@drawable/back">
 			
 		</Button>
 
