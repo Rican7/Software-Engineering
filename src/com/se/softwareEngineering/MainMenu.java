@@ -10,7 +10,7 @@ public class MainMenu extends Activity{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		
@@ -19,7 +19,7 @@ public class MainMenu extends Activity{
 		btn_Play.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				
 				startActivity(new Intent("com.se.softwareEngineering.LEVELSELECT"));
 			}
 		});
@@ -29,7 +29,17 @@ public class MainMenu extends Activity{
 		btn_Settings.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				
+				
+			}
+		});
+		
+		Button btn_About = (Button) findViewById (R.id.btnAbout);
+		btn_About.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent("com.se.softwareEngineering.ABOUT"));
 				
 			}
 		});
