@@ -5,48 +5,35 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@drawable/menubackground">
-    <TextView 
-	    android:text="Level Select" 
-	    android:id="@+id/textView1" 
-	    android:layout_width="wrap_content" 
+  
+    <RelativeLayout
+	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_gravity="center_horizontal">
-	</TextView>
-	<RelativeLayout
-		android:orientation="horizontal"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
-	    <Button
-	    	android:id="@+id/btnlevel1" 
-	    	android:background="@drawable/level1"
-	    	android:gravity="left"
-	    	 android:layout_width="100dp"
-	    	 android:layout_height="100dp">
-	    </Button>
-	    <Button
-	    	android:id="@+id/btnlevel2" 
-	    	android:gravity="right" 
-	    	android:background="@drawable/level2"
-	    	android:layout_width="100dp"
-	    	android:layout_height="100dp"
-	    	android:layout_marginLeft="150dp">
-	    </Button>
-    </RelativeLayout>
-    <LinearLayout
-		android:orientation="horizontal"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
-	    <Button
-	    	android:text="btnLocked" 
-	    	android:id="@+id/level3" 
-	    	android:layout_width="wrap_content" 
-	    	android:layout_height="wrap_content" android:paddingRight="20dp">
-	    </Button>
-	    <Button
-	    	android:text="Coming Soon" 
-	    	android:id="@+id/btnlevel4" 
-	    	android:layout_width="wrap_content" 
-	    	android:layout_height="wrap_content">
-	    </Button>
-    </LinearLayout>
+	    android:orientation="vertical">
+	    <TextView  
+		    android:layout_width="wrap_content" 
+		    android:layout_height="wrap_content" 
+		    android:text="Level Select"
+		    android:layout_centerVertical="true" 
+		    android:layout_centerHorizontal="true"/>
+	    <Button 
+			android:id="@+id/btnBack" 
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true" 
+			android:background="@drawable/back"/>
+    	
+	</RelativeLayout>
+	
+	<GridView 
+	    android:id="@+id/gridview"
+	    android:layout_width="fill_parent" 
+	    android:layout_height="fill_parent"
+	    android:columnWidth="90dp"
+	    android:verticalSpacing="10dp"
+	    android:horizontalSpacing="10dp"
+	    android:stretchMode="columnWidth"
+	    android:gravity="center"
+		android:numColumns="2"/>  
 </LinearLayout>
+ 

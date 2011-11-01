@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title">Snowboarder</string>
-    <string name="app_name">PSU Boarders</string>
+    <string name="title">Downhill Disaster</string>
+    <string name="app_name">Downhill Disaster</string>
+    <string name="level2Image">@drawable/level2</string>
 </resources>
