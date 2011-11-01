@@ -35,21 +35,26 @@
 		<activity android:name=".Level1" android:label="@string/app_name"
 			android:screenOrientation="landscape">
 			<intent-filter>
-				<action android:name="com.se.softwareEngineering.LEVEL1" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
+                <action android:name="com.se.softwareEngineering.test2d.Test2D" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
 		</activity>
 		
 		<activity
 		    android:label="@string/app_name"
 		    android:name=".test2d.Test2D"
 		    android:screenOrientation="landscape">
-            <intent-filter>
-                <action android:name="com.se.softwareEngineering.test2d.Test2D" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+            
         </activity>
 		
+		<activity 
+		    android:name=".PrefsActivity">
+			<intent-filter>
+				<action android:name="com.se.softwareEngineering.PREFSACTIVITY" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>		    
 
 	</application>
 </manifest>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen 
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <CheckBoxPreference 
+        android:title="@string/soundEffects" 
+        android:summary="@string/soundEffectsSum" 
+        android:key="soundEffects"/>
+    
+    <CheckBoxPreference 
+        android:key="music" 
+        android:title="@string/music" 
+        android:summary="@string/musicSum"
+        android:checked="true"
+    />
+    
+    <CheckBoxPreference 
+        android:title="@string/items" 
+        android:summary="@string/itemSum" 
+        android:key="items"
+        android:checked="true"
+    />
+    
+    <Preference 
+        android:summary="@string/charResetSum" 
+        android:key="reset" 
+        android:title="@string/charReset"
+        
+    />
+
+    
+
+</PreferenceScreen>
