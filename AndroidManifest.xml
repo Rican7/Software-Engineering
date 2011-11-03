@@ -43,6 +43,13 @@
 			</intent-filter>
 		</activity>
 		
+		<activity 
+		    android:name=".PrefsActivity">
+			<intent-filter>
+				<action android:name="com.se.softwareEngineering.PREFSACTIVITY" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
 		<activity android:name=".About" android:label="@string/app_name"
 			android:screenOrientation="landscape"
 			android:theme="@android:style/Theme.Dialog">
