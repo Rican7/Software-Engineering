@@ -29,7 +29,7 @@ public class MainMenu extends Activity{
 		btn_Settings.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				
+				startActivity(new Intent("com.se.softwareEngineering.PREFSACTIVITY"));
 				
 			}
 		});
