@@ -18,9 +18,9 @@ public class Element {
     
     public Element(Resources res, int x, int y) {
         //Random rand = new Random();
-        mBitmap = BitmapFactory.decodeResource(res, R.drawable.icon);
+        mBitmap = BitmapFactory.decodeResource(res, R.drawable.character_r1_c3);
         mX = x - mBitmap.getWidth() / 2;
-        mY = y - mBitmap.getHeight() / 2;
+        mY = (y*2) - mBitmap.getHeight();
         mSpeedX = 0;
         //mSpeedY = rand.nextInt(7) - 3;
     }
@@ -33,7 +33,7 @@ public class Element {
      * @param elapsedTime in ms.
      */
     public void animate(long elapsedTime) {
-        mSpeedX = (int) Test2D.gravity[1];
+        mSpeedX = (int) (Test2D.gravity[1] * (1.3));
         mX += mSpeedX * (elapsedTime / 5f);
         //mY += mSpeedY * (elapsedTime / 20f);
         checkBorders();
