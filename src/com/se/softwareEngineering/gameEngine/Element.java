@@ -1,4 +1,4 @@
-package com.se.softwareEngineering.test2d;
+package com.se.softwareEngineering.gameEngine;
 
 import com.se.softwareEngineering.*;
 
@@ -33,7 +33,7 @@ public class Element {
      * @param elapsedTime in ms.
      */
     public void animate(long elapsedTime) {
-        mSpeedX = (int) (Test2D.gravity[1] * (1.3));
+        mSpeedX = (int) (GameEngine.gravity[1] * (1.3));
         mX += mSpeedX * (elapsedTime / 5f);
         //mY += mSpeedY * (elapsedTime / 20f);
         checkBorders();

@@ -1,4 +1,4 @@
-package com.se.softwareEngineering.test2d;
+package com.se.softwareEngineering.gameEngine;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.WindowManager;
 
-public class Test2D extends Activity implements SensorEventListener {
+public class GameEngine extends Activity implements SensorEventListener {
     
     // Declare sensor management variables
 	private SensorManager aSensorManager;

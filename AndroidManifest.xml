@@ -69,10 +69,10 @@
 		
 		<activity
 		    android:label="@string/app_name"
-		    android:name=".test2d.Test2D"
+		    android:name=".gameEngine.GameEngine"
 		    android:screenOrientation="landscape">
             <intent-filter>
-                <action android:name="com.se.softwareEngineering.test2d.Test2D" />
+                <action android:name="com.se.softwareEngineering.gameEngine.GameEngine" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
