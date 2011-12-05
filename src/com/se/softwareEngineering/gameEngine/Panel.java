@@ -1,9 +1,7 @@
 package com.se.softwareEngineering.gameEngine;
 
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Iterator;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -18,7 +16,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     public static float mHeight;
     
     private ViewThread mThread;
-    private ArrayList<itemElement> itemElements = new ArrayList<itemElement>();
+    public ArrayList<itemElement> itemElements = new ArrayList<itemElement>();
     private Element mElement;
 
     private Paint mPaint = new Paint();
@@ -27,8 +25,6 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
         super(context);
         getHolder().addCallback(this);
         mThread = new ViewThread(this);
-        mPaint.setColor(Color.BLACK);
-        mPaint.setTextSize(20);
     }
     
     public void doDraw(long elapsed, Canvas canvas) {
@@ -41,16 +37,18 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 		
         // Draw items
 		synchronized (itemElements) {
-            for (itemElement itemElement : itemElements) {
-            	itemElement.doDraw(canvas);
-            }
+			if (itemElements.size() > 0) {
+	            for (Iterator<itemElement> it = itemElements.iterator(); it.hasNext();) {
+	            	it.next().doDraw(canvas);
+	            }
+			}
         }
         
         // Draw character
 		mElement.doDraw(canvas);
         
         // Draw framerate
-        canvas.drawText("FPS: " + Math.round(1000f / elapsed), 10, 10, mPaint);
+        //canvas.drawText("FPS: " + Math.round(1000f / elapsed), 10, 10, mPaint);
     }
     
     @Override
@@ -61,8 +59,11 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-    	// Create a timer
-    	final Timer timer = new Timer();
+        mWidth = this.getWidth();
+        mHeight = this.getHeight();
+        
+        // Create the main element
+        mElement = new Element(getResources(), (int) mWidth/2, (int) mHeight/2);
     	
         if (!mThread.isAlive()) {
             mThread = new ViewThread(this);
@@ -70,13 +71,8 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
             mThread.start();
         }
         
-        mWidth = this.getWidth();
-        mHeight = this.getHeight();
-        
-        // Create the main element
-        mElement = new Element(getResources(), (int) mWidth/2, (int) mHeight/2);
-        
         // Create a sub-class to run a task every n seconds
+        /*
         class RemindTask extends TimerTask {
             public void run() {
             	Random rand = new Random();
@@ -92,14 +88,12 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
                     	}
                     }
                 }
-            	
-            	// Start this baby back up!
-                timer.schedule(new RemindTask(), 4*1000);
             }
         }
+        */
         
-        // Initially schedule the task
-        timer.schedule(new RemindTask(), 1*1000);
+        // Tell the engine that the surface has been created
+        GameEngine.surfaceCreated();
     }
     
     @Override
@@ -113,9 +107,11 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     	mElement.animate(elapsedTime);
     	
     	synchronized (itemElements) {
-            for (itemElement itemElement : itemElements) {
-            	itemElement.animate(elapsedTime);
-            }
+    		if (itemElements.size() > 0) {
+	            for (Iterator<itemElement> it = itemElements.iterator(); it.hasNext();) {
+	            	it.next().animate(elapsedTime);
+	            }
+    		}
         }
     }
 }
