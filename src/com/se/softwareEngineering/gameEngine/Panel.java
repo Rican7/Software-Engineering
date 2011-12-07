@@ -71,27 +71,6 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
             mThread.start();
         }
         
-        // Create a sub-class to run a task every n seconds
-        /*
-        class RemindTask extends TimerTask {
-            public void run() {
-            	Random rand = new Random();
-            	
-            	// Create an item element at a random location
-            	itemElements.add(new itemElement(getResources(), (int) (rand.nextInt((int) (mWidth*3/5)) + (mWidth/5)), 0));
-            	
-            	// Check if any of the item elements are out of bounds, and remove them
-            	synchronized (itemElements) {
-                    for (itemElement itemElement : itemElements) {
-                    	if (itemElement.getOutOfBounds()) {
-                    		//itemElements.remove(itemElement);
-                    	}
-                    }
-                }
-            }
-        }
-        */
-        
         // Tell the engine that the surface has been created
         GameEngine.surfaceCreated();
     }

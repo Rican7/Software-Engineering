@@ -10,8 +10,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
@@ -20,8 +18,11 @@ public class GameEngine extends Activity implements SensorEventListener {
 	
 	// Setup options
 	public static boolean debug = false;
+	static int gameSpeed = 20;
 	private int luckyNumber = 7; // Number used to calculate lotto... arbitrary
-	private int itemLottoChance = 50000; // Between 0 and n
+	private int itemLottoChance = 300; // Between 0 and n
+	private int itemSpawnDelay = 600; // Relative to gamespeed delay. So itemSpawnDelay * gameSpeed = time in ms
+	private int timeLastItem = 0;
 	
 	// Declare main panel
 	Panel gamePanel;
@@ -32,6 +33,7 @@ public class GameEngine extends Activity implements SensorEventListener {
 	// Game running
 	Boolean gameRunning = false;
 	static Boolean surfaceCreated = false;
+	static int gameRunningTime = 0;
     
     // Declare sensor management variables
 	private SensorManager aSensorManager;
@@ -41,17 +43,14 @@ public class GameEngine extends Activity implements SensorEventListener {
     public static float[] gravity = new float[3];
     public static float[] linear_acceleration = new float[3];
     
-    Handler handler = new Handler(){
-		@Override
-		public void handleMessage(Message msg) {
-			// TODO Auto-generated method stub
-			run_game();
-		}
-	};
-    
     public void run_game() {
+    	// Execute while the surface exists
+    	if (surfaceCreated) {
+    		moderateItems();
+    	}
+    	
     	// Execute while the game is running
-    	while(gameRunning) {
+    	if (gameRunning) {
     		// Run methods
     		/*
     		 * moveControls();
@@ -62,11 +61,7 @@ public class GameEngine extends Activity implements SensorEventListener {
     		*/
     		
     		checkIfGameOver();
-    	}
-    	
-    	// Execute while the surface exists
-    	while(surfaceCreated) {
-    		moderateItems();
+    		gameRunningTime();
     	}
     }
     
@@ -78,9 +73,17 @@ public class GameEngine extends Activity implements SensorEventListener {
 	    
     	// Calculate the lottery, and if its correct (win)... add an item to the screen
     	if (itemLotto == (itemLottoChance / luckyNumber)) {
-	    	// Create an item element at a random location
-	    	gamePanel.itemElements.add(new itemElement(getResources(), (int) (rand.nextInt((int) (Panel.mWidth*3/5)) + (Panel.mWidth/5)), 0));
-	    	Log.i("Item Log", "Item Created!");
+    		// Check to see if its been longer than n before creating another item (don't want to have too many items spawn by chance)
+    		if ((gameRunningTime - timeLastItem) > itemSpawnDelay) {
+		    	// Create an item element at a random location
+    			synchronized (gamePanel.itemElements) {
+			    	gamePanel.itemElements.add(new itemElement(getResources(), (int) (rand.nextInt((int) (Panel.mWidth*3/5)) + (Panel.mWidth/5)), 0));
+			    	Log.i("Item Log", "Item Created at " + gameRunningTime);
+			    	
+			    	// Set the time that this item has spawned at
+			    	timeLastItem = gameRunningTime;
+    			}
+    		}
     	}
     	
     	// Check if any of the item elements are out of bounds, and remove them
@@ -88,7 +91,7 @@ public class GameEngine extends Activity implements SensorEventListener {
             for (Iterator<itemElement> it = gamePanel.itemElements.iterator(); it.hasNext();) {
             	if (it.next().getOutOfBounds()) {
             		it.remove();
-            		Log.i("Item Log", "Item Destroyed!");
+            		Log.i("Item Log", "Item Destroyed at " + gameRunningTime);
             	}
             }
         }
@@ -124,10 +127,11 @@ public class GameEngine extends Activity implements SensorEventListener {
     	mainGameThread = new Thread(new Runnable() {
 			public void run() {
 				while (gameRunning) {
+					// Run the game loop
+					run_game();
+					
 					try {
-						run_game();
-						handler.sendMessage(handler.obtainMessage());
-						Thread.sleep(1000);
+						Thread.sleep(gameSpeed);
 					} catch (Throwable t) {
 						// For debugging purposes
 						if (debug) {
@@ -137,8 +141,6 @@ public class GameEngine extends Activity implements SensorEventListener {
 				}
 			}
 		});
-
-		mainGameThread.start();
     }
 
 	protected void onResume() {
@@ -190,6 +192,19 @@ public class GameEngine extends Activity implements SensorEventListener {
     		gameOver();
     	}
     	*/
+    }
+    
+    private void gameRunningTime() {
+    	// Incrememnt time
+		gameRunningTime++;
+		
+		// Calculate actual game running time in seconds
+		double actualRunningTime = (double)(gameRunningTime * gameSpeed) / 1000;
+		
+		// Log every 5 seconds (real time)
+		if ((actualRunningTime % 5.0) == 0) {
+			Log.i("Game Time", "Game has been running for " + (int)actualRunningTime + " seconds");
+		}
     }
 
     // Set the surface created variable to true

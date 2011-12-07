@@ -16,6 +16,7 @@ public class Element {
     
     private Bitmap mBitmap;
     
+    // Constructor
     public Element(Resources res, int x, int y) {
         //Random rand = new Random();
         mBitmap = BitmapFactory.decodeResource(res, R.drawable.character_r1_c3);
