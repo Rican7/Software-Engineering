@@ -1,4 +1,4 @@
-package com.se.softwareEngineering.test2d;
+package com.se.softwareEngineering.gameEngine;
 
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;

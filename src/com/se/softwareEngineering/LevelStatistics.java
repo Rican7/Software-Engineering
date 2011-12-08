@@ -18,7 +18,7 @@ public class LevelStatistics extends Activity{
 			
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent("com.se.softwareEngineering.test2d.Test2D"));
+				startActivity(new Intent("com.se.softwareEngineering.gameEngine.GameEngine"));
 				
 			}
 		});
