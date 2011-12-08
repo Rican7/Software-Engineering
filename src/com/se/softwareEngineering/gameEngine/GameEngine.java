@@ -20,9 +20,15 @@ public class GameEngine extends Activity implements SensorEventListener {
 	public static boolean debug = false;
 	static int gameSpeed = 20;
 	private int luckyNumber = 7; // Number used to calculate lotto... arbitrary
-	private int itemLottoChance = 300; // Between 0 and n
-	private int itemSpawnDelay = 600; // Relative to gamespeed delay. So itemSpawnDelay * gameSpeed = time in ms
+	private int itemLottoChance = 200; // Between 0 and n
+	private int itemSpawnDelay = 200; // Relative to gamespeed delay. So itemSpawnDelay * gameSpeed = time in ms
 	private int timeLastItem = 0;
+	private int obstructionLottoChance = 100; // Between 0 and n
+	private int obstructionSpawnDelay = 50; // Relative to gamespeed delay. So obstructionSpawnDelay * gameSpeed = time in ms
+	private int obstructionLastItem = 0;
+
+	// Random number instance
+	private static Random random = new Random();
 	
 	// Declare main panel
 	Panel gamePanel;
@@ -46,30 +52,28 @@ public class GameEngine extends Activity implements SensorEventListener {
     public void run_game() {
     	// Execute while the surface exists
     	if (surfaceCreated) {
-    		moderateItems();
+    		itemController();
+    		obstructionController();
     	}
     	
     	// Execute while the game is running
     	if (gameRunning) {
-    		// Run methods
-    		/*
-    		 * moveControls();
-    		fireControls();
-    		EnemyController();
-    		shipfireCollisionDetector();
-    		playerCollisionDetector();
-    		*/
-    		
     		checkIfGameOver();
     		gameRunningTime();
     	}
     }
     
-    private void moderateItems() {
-    	Random rand = new Random();
-    	
+    /* Controls the items:
+     *	- Creating
+     *	- Checking boundaries
+     *	- Checking collisions with player
+     *	- Handles scoring based on the item
+     *	- Handles health effect based on the item
+     *	- Handles speed effect based on the item
+     */
+    private void itemController() {
     	// Generate a random number between 0 and 500
-    	int itemLotto = rand.nextInt(itemLottoChance);
+    	int itemLotto = random.nextInt(itemLottoChance);
 	    
     	// Calculate the lottery, and if its correct (win)... add an item to the screen
     	if (itemLotto == (itemLottoChance / luckyNumber)) {
@@ -77,7 +81,7 @@ public class GameEngine extends Activity implements SensorEventListener {
     		if ((gameRunningTime - timeLastItem) > itemSpawnDelay) {
 		    	// Create an item element at a random location
     			synchronized (gamePanel.itemElements) {
-			    	gamePanel.itemElements.add(new itemElement(getResources(), (int) (rand.nextInt((int) (Panel.mWidth*3/5)) + (Panel.mWidth/5)), 0));
+			    	gamePanel.itemElements.add(new itemElement(getResources()));
 			    	Log.i("Item Log", "Item Created at " + gameRunningTime);
 			    	
 			    	// Set the time that this item has spawned at
@@ -86,12 +90,78 @@ public class GameEngine extends Activity implements SensorEventListener {
     		}
     	}
     	
-    	// Check if any of the item elements are out of bounds, and remove them
+    	// Loop through each existing element
     	synchronized (gamePanel.itemElements) {
             for (Iterator<itemElement> it = gamePanel.itemElements.iterator(); it.hasNext();) {
-            	if (it.next().getOutOfBounds()) {
+            	// Get the current item in the iteration loop
+            	itemElement currentItem = it.next();
+
+            	// If any of the item elements collide with the player
+            	if (currentItem.checkCollisionWithPlayer(gamePanel.player)) {
+            		// Remove the item
             		it.remove();
+            		
+            		// Debugging
+            		Log.i("Item Log", "Item Collided with player at " + gameRunningTime);
+            	}
+            	// If any of the item elements are out of bounds
+            	else if (currentItem.checkOutOfBounds()) {
+            		// Remove the item
+            		it.remove();
+            		
+            		// Debugging
             		Log.i("Item Log", "Item Destroyed at " + gameRunningTime);
+            	}
+            }
+        }
+    }
+    
+    /* Controls the obstructions:
+     *	- Creating
+     *	- Checking boundaries
+     *	- Checking collisions with player
+     *	- Handles health effect based on the obstruction
+     */
+    private void obstructionController() {
+    	// Generate a random number between 0 and the lotto
+    	int obstructionLotto = random.nextInt(obstructionLottoChance);
+	    
+    	// Calculate the lottery, and if its correct (win)... add an obstruction to the screen
+    	if (obstructionLotto == (obstructionLottoChance / luckyNumber)) {
+    		// Check to see if its been longer than n before creating another obstruction (don't want to have too many obstructions spawn by chance)
+    		if ((gameRunningTime - obstructionLastItem) > obstructionSpawnDelay) {
+		    	// Create an obstruction element at a random location
+    			synchronized (gamePanel.obstructionElements) {
+			    	gamePanel.obstructionElements.add(new obstructionElement(getResources()));
+			    	Log.i("Obstruction Log", "Obstruction Created at " + gameRunningTime);
+			    	
+			    	// Set the time that this item has spawned at
+			    	obstructionLastItem = gameRunningTime;
+    			}
+    		}
+    	}
+    	
+    	// Loop through each existing element
+    	synchronized (gamePanel.obstructionElements) {
+            for (Iterator<obstructionElement> it = gamePanel.obstructionElements.iterator(); it.hasNext();) {
+            	// Get the current obstruction in the iteration loop
+            	obstructionElement currentObstruction = it.next();
+
+            	// If any of the obstruction elements collide with the player
+            	if (currentObstruction.checkCollisionWithPlayer(gamePanel.player)) {
+            		// Remove the item
+            		it.remove();
+            		
+            		// Debugging
+            		Log.i("Obstruction Log", "Obstruction Collided with player at " + gameRunningTime);
+            	}
+            	// If any of the obstruction elements are out of bounds
+            	else if (currentObstruction.checkOutOfBounds()) {
+            		// Remove the item
+            		it.remove();
+            		
+            		// Debugging
+            		Log.i("Obstruction Log", "Obstruction Destroyed at " + gameRunningTime);
             	}
             }
         }
@@ -145,7 +215,7 @@ public class GameEngine extends Activity implements SensorEventListener {
 
 	protected void onResume() {
         super.onResume();
-        aSensorManager.registerListener(this, aAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        aSensorManager.registerListener(this, aAccelerometer, SensorManager.SENSOR_DELAY_GAME);
         
         // Resume handler
         gameRunning = true;

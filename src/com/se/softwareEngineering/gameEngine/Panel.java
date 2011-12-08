@@ -11,29 +11,45 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 public class Panel extends SurfaceView implements SurfaceHolder.Callback {
-
+	// Set public static properties of the Panel
     public static float mWidth;
     public static float mHeight;
+    public static float leftBound;
+    public static float rightBound;
     
+    // Declare the view thread
     private ViewThread mThread;
+    
+    // Declare the publicly accessible elements (items, obstructions, and the player)
     public ArrayList<itemElement> itemElements = new ArrayList<itemElement>();
-    private Element mElement;
+    public ArrayList<obstructionElement> obstructionElements = new ArrayList<obstructionElement>();
+    public playerElement player;
 
+    // Create a painting object to paint lines to the screen
     private Paint mPaint = new Paint();
     
+    // Panel constructor
     public Panel(Context context) {
         super(context);
         getHolder().addCallback(this);
         mThread = new ViewThread(this);
     }
     
+    // Method to draw the contents of the screen to the surface
     public void doDraw(long elapsed, Canvas canvas) {
     	// Draw background
         canvas.drawColor(Color.WHITE);
         
         // Draw perspective guide lines
+        mPaint.setColor(Color.rgb(180, 180, 180));
+        canvas.drawLine(leftBound, 0, leftBound, mHeight, mPaint);
+        canvas.drawLine(rightBound, 0, rightBound, mHeight, mPaint);
+        
+        /*
+        // Draw perspective guide lines
         canvas.drawLine(mWidth/5, 0, 0, mHeight, mPaint);
         canvas.drawLine((mWidth*4/5), 0, mWidth, mHeight, mPaint);
+        */
 		
         // Draw items
 		synchronized (itemElements) {
@@ -43,9 +59,18 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	            }
 			}
         }
+		
+		// Draw obstructions
+		synchronized (obstructionElements) {
+			if (obstructionElements.size() > 0) {
+	            for (Iterator<obstructionElement> it = obstructionElements.iterator(); it.hasNext();) {
+	            	it.next().doDraw(canvas);
+	            }
+			}
+        }
         
         // Draw character
-		mElement.doDraw(canvas);
+		player.doDraw(canvas);
         
         // Draw framerate
         //canvas.drawText("FPS: " + Math.round(1000f / elapsed), 10, 10, mPaint);
@@ -59,11 +84,16 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+    	// Set the panel's width and height
         mWidth = this.getWidth();
         mHeight = this.getHeight();
         
-        // Create the main element
-        mElement = new Element(getResources(), (int) mWidth/2, (int) mHeight/2);
+        // Set the left and right boundaries (where the trail sides end and the trees reside)
+        leftBound = mWidth/8;
+        rightBound = mWidth*7/8;
+        
+        // Create the main player
+        player = new playerElement(getResources(), (int) mWidth/2, (int) mHeight/2);
     	
         if (!mThread.isAlive()) {
             mThread = new ViewThread(this);
@@ -82,12 +112,24 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
     
+    // Animation method... here, all of the elements must animate
     public void animate(long elapsedTime) {
-    	mElement.animate(elapsedTime);
+    	// Animate the player
+    	player.animate(elapsedTime);
     	
+    	// Animate each item element
     	synchronized (itemElements) {
     		if (itemElements.size() > 0) {
 	            for (Iterator<itemElement> it = itemElements.iterator(); it.hasNext();) {
+	            	it.next().animate(elapsedTime);
+	            }
+    		}
+        }
+    	
+    	// Animate each obstruction element
+    	synchronized (obstructionElements) {
+    		if (obstructionElements.size() > 0) {
+	            for (Iterator<obstructionElement> it = obstructionElements.iterator(); it.hasNext();) {
 	            	it.next().animate(elapsedTime);
 	            }
     		}

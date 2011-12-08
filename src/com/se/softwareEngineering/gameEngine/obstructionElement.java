@@ -10,7 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
-public class itemElement {
+public class obstructionElement {
 	// Random number instance
 	private static Random random = new Random();
 	
@@ -18,24 +18,24 @@ public class itemElement {
     private float mX;
     private float mY;
     
-    // Its x and y speeds
-    private double mSpeedX;
+    // Its speed
     private double mSpeedY;
     
     // Item type variables
     private final int[] itemDrawables = {
-		R.drawable.energy_norm,
-		R.drawable.pizza_norm
+		R.drawable.log1_norm,
+		R.drawable.log2_norm,
+		R.drawable.rock1_norm,
+		R.drawable.rock2_norm
     };
     private int itemDrawable;
     private int healthEffect;
-    private int speedEffect;
     
     // The bitmap image
     private Bitmap mBitmap;
     
     // Constructor
-    public itemElement(Resources res) {
+    public obstructionElement(Resources res) {
     	// Set the item type
     	setItemType();
     	
@@ -49,15 +49,6 @@ public class itemElement {
         mX = randomStartX;
         mY = 0 - mBitmap.getHeight();
         
-        // Determine the horizontal speed
-        // Determine if moving left or right
-        if (random.nextInt(2) == 1) {
-        	mSpeedX = random.nextDouble() * (0.3);
-        }
-        else {
-        	mSpeedX = -(random.nextDouble() * (0.3));
-        }
-        
         // Determine the vertical speed
         mSpeedY = 1 * (0.25);
     }
@@ -70,16 +61,20 @@ public class itemElement {
     	// Set item drawable resource
     	itemDrawable = itemDrawables[randomNum];
     	
-    	// Energy drink
-        if (randomNum == 0) {
+    	// Log
+        if (randomNum == 0 || randomNum == 1) {
         	// Set properties
-        	healthEffect = 2;
-        	speedEffect = 10;
+        	healthEffect = -2;
         }
-        else if (randomNum == 1) {
+        // Rock
+        else if (randomNum == 2) {
         	// Set properties
-        	healthEffect = 10;
-        	speedEffect = 0;
+        	healthEffect = -10;
+        }
+        // BIG rock
+        else if (randomNum == 3) {
+        	// Set properties
+        	healthEffect = -20;
         }
     }
     
@@ -91,19 +86,8 @@ public class itemElement {
      * @param elapsedTime in ms.
      */
     public void animate(long elapsedTime) {
-    	// Make sure it doesn't "fall off the trail"
-    	checkTrailBounds();
-    	
-    	// Animate the x and y cooardinates
-    	mX += mSpeedX * (elapsedTime / 5f);
+    	// Animate the y cooardinate
         mY += mSpeedY * (elapsedTime / 5f);
-    }
-    
-    // Method to check if the item has hit the trail bounds, and then reverse the direction
-    private void checkTrailBounds() {
-    	if (mX <= Panel.leftBound || (mX + mBitmap.getWidth() >= Panel.rightBound)) {
-            mSpeedX = -mSpeedX;
-        }
     }
 
     // Method to check the borders of the item to see if its out of bounds (no longer visible)
@@ -170,16 +154,16 @@ public class itemElement {
     
     // Check collision with player
     public boolean checkCollisionWithPlayer(playerElement player) {
-    	// Get boundary array of this item and the player
-    	int[][] itemBounds = this.getBounds();
+    	// Get boundary array of this obstruction and the player
+    	int[][] obstructionBounds = this.getBounds();
     	int[][] playerBounds = player.getBounds();
     	
-    	// Create rectangle objects for the item and player
-    	Rect itemRect = new Rect(
-    		itemBounds[0][0],
-    		itemBounds[0][1],
-    		itemBounds[2][0],
-    		itemBounds[2][1]
+    	// Create rectangle objects for the obstruction and player
+    	Rect obstructionRect = new Rect(
+    		obstructionBounds[0][0],
+    		obstructionBounds[0][1],
+    		obstructionBounds[2][0],
+    		obstructionBounds[2][1]
     	);
     	Rect playerRect = new Rect(
 			playerBounds[0][0],
@@ -189,7 +173,7 @@ public class itemElement {
     	);
     	
     	// Check to see if the two rectangular bounding-boxes intersect
-    	if (Rect.intersects(itemRect, playerRect)) {
+    	if (Rect.intersects(obstructionRect, playerRect)) {
     		return true;
     	}
     	
@@ -199,10 +183,5 @@ public class itemElement {
     // Get health effect
     public int getHealthEffect() {
     	return healthEffect;
-    }
-    
-    // Get speed effect
-    public int getSpeedEffect() {
-    	return speedEffect;
     }
 }
