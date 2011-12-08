@@ -20,7 +20,6 @@ public class Dead extends Activity{
 		btn_Retry.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				//Update here
 				startActivity(new Intent("com.se.softwareEngineering.gameEngine.GameEngine"));
 				finish();
 			}

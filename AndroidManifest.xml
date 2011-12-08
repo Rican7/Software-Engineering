@@ -87,6 +87,7 @@
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
+		
 		<activity 
 			android:name=".finishlevel1" 
 			android:label="@string/app_name"
