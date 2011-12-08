@@ -19,6 +19,11 @@ public class FinishLevel1 extends Activity{
 			public void onClick(View v) {
 				//Goes to level 2
 				startActivity(new Intent("com.se.softwareEngineering.gameEngine.GameEngine"));
+				
+				//set values
+				//gamespeed = 40;
+				//luck = higher;
+				
 				finish();
 			}
 		});
