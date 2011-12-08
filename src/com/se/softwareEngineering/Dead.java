@@ -6,31 +6,39 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class LevelStatistics extends Activity{
+public class Dead extends Activity{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.levelstats);
+		setContentView(R.layout.dead);
 		
-		Button btn_PlayFinal = (Button) findViewById (R.id.btnPlayFinal);
-		btn_PlayFinal.setOnClickListener(new View.OnClickListener() {
+		
+		//Retry button
+		Button btn_Retry = (Button) findViewById (R.id.btnRetry);
+		btn_Retry.setOnClickListener(new View.OnClickListener() {
 			
-			@Override
 			public void onClick(View v) {
+				//Update here
 				startActivity(new Intent("com.se.softwareEngineering.gameEngine.GameEngine"));
-				
+				finish();
 			}
 		});
-		Button btn_exit = (Button) findViewById (R.id.btnBack);
-		btn_exit.setOnClickListener(new View.OnClickListener() {
+		
+		
+		//Main Menu button
+		Button btn_MainMenu = (Button) findViewById (R.id.btnMM);
+		btn_MainMenu.setOnClickListener(new View.OnClickListener() {
 			
-			@Override
 			public void onClick(View v) {
+				setContentView(R.layout.main);
 				finish();
 				
 			}
 		});
+		
+		
 	}
-	
+
 }

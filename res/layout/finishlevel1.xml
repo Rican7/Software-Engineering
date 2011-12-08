@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    
+
+    <TextView 
+	    android:text="Level 1 Complete" 
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content" 
+	    android:textSize="40dp"
+	    android:layout_centerHorizontal="true" android:id="@+id/textView2">
+    </TextView>
+    <Button 
+	    android:text="Continue" 
+	    android:id="@+id/btnContinue" 
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content"
+	   	android:layout_alignParentBottom="true">
+    </Button>
+    <Button 
+	    android:text="Quit" 
+	    android:id="@+id/btnMM" 
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:layout_alignParentRight="true">
+    </Button>
+    <TextView 
+	    android:layout_height="wrap_content" 
+	    android:layout_width="wrap_content" 
+	    android:textAppearance="?android:attr/textAppearanceLarge" 
+	    android:layout_centerVertical="true" 
+	    android:layout_centerHorizontal="true" 
+	    android:id="@+id/txtFinalScore" 
+	    android:text="Final Score: 500">
+	</TextView>
+    
+</RelativeLayout>
