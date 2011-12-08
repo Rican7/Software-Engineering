@@ -35,13 +35,22 @@ public class LevelSelect extends Activity{
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
             	//Goes to LevelStats need to look up statistics later dependent on level that is picked (position)
             	if (position == 0){
-            		startActivity(new Intent("com.se.softwareEngineering.LEVELSTATS"));
+            		startActivity(new Intent("com.se.softwareEngineering.gameEngine.GameEngine"));
+            		//set  variables here also for difficulty
+            		//speed - luck 
+            		//max score so you know when the level ends
+            		
             	}
             	else if (position ==1){
-            		Toast.makeText(LevelSelect.this, "Locked Complete Level 1",Toast.LENGTH_SHORT).show();
+            		startActivity(new Intent("com.se.softwareEngineering.gameEngine.GameEngine"));
+            		//set  variables here also for difficulty
+            		//max score so you know when the level ends
+            		
             	}
             	else if (position ==2){
-            		Toast.makeText(LevelSelect.this, "Locked Complete Level 2",Toast.LENGTH_SHORT).show();
+            		startActivity(new Intent("com.se.softwareEngineering.gameEngine.GameEngine"));
+            		//set  variables here also for difficulty
+            		//max score = 2345635634634645633654654634
             	}
             	else {
             		Toast.makeText(LevelSelect.this, "Comming Soon",Toast.LENGTH_SHORT).show();
