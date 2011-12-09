@@ -4,14 +4,19 @@ import java.util.Iterator;
 import java.util.Random;
 
 import com.se.softwareEngineering.Finish;
+import com.se.softwareEngineering.R;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
@@ -40,6 +45,14 @@ public class GameEngine extends Activity implements SensorEventListener {
 	static int gameScore;
 	private boolean boostOn;
 	private int gravityDirection;
+	
+	// Music media player
+	MediaPlayer musicPlayer;
+	
+	// Android preferences
+	SharedPreferences preferences;
+	boolean musicEnabled;
+	boolean itemsEnabled;
 
 	// Random number instance
 	private static Random random = new Random();
@@ -49,6 +62,9 @@ public class GameEngine extends Activity implements SensorEventListener {
 	
 	// Declare main game thread
 	Thread mainGameThread;
+	
+	// Declare music/sound thread
+	Thread musicSoundThread;
 	
 	// Game running
 	Boolean gameRunning = false;
@@ -80,7 +96,10 @@ public class GameEngine extends Activity implements SensorEventListener {
     	if (gameRunning) {
 	    	// Execute while the surface exists
 	    	if (surfaceCreated) {
-	    		itemController();
+	    		// Don't bother running the item controller if they aren't enabled
+	    		if (itemsEnabled) {
+	    			itemController();
+	    		}
 	    		obstructionController();
 	    		checkPlayerHealth();
 	    	}
@@ -285,6 +304,9 @@ public class GameEngine extends Activity implements SensorEventListener {
 		// Let's do some cleanup
 		surfaceCreated = false;
 		gameRunningTime = 0;
+		
+		// Stop the music
+		musicPlayer.stop();
 	}
 
 	/** Called when the activity is first created. */
@@ -299,6 +321,11 @@ public class GameEngine extends Activity implements SensorEventListener {
         // Get the data from the bundle passed in the intent
         Bundle bundle = getIntent().getExtras(); 
 	    int level = bundle.getInt("level", 1);
+	    
+	    // Get the preferences and store them as local variables
+		preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		musicEnabled = preferences.getBoolean("music", true);
+		itemsEnabled = preferences.getBoolean("items", true);
         
         // Keep screen on
         this.getWindow().
@@ -314,6 +341,13 @@ public class GameEngine extends Activity implements SensorEventListener {
 	    
     	// Set the difficulty of the game
     	setDifficulty(level);
+        
+        // Load the song into the music player
+        musicPlayer = MediaPlayer.create(this, R.raw.rocket);
+        musicPlayer.setLooping(true);
+		/* Rocket 
+		 * Kevin MacLeod (incompetech.com) Licensed under Creative Commons "Attribution 3.0" http://creativecommons.org/licenses/by/3.0/
+		 */
     }
     
     /** Called when the activity is first started. */
@@ -339,7 +373,10 @@ public class GameEngine extends Activity implements SensorEventListener {
 					}
 				}
 				
-				finish();
+				// If the game is marked as over, then kill the activity
+				if (gameOver) {
+					finish();
+				}
 			}
 		});
     }
@@ -354,6 +391,11 @@ public class GameEngine extends Activity implements SensorEventListener {
         	gameRunning = true;
 			mainGameThread.start();
         }
+        
+        // Play the music
+        if (musicEnabled) {
+        	musicPlayer.start();
+        }
     }
 
     protected void onPause() {
@@ -362,6 +404,9 @@ public class GameEngine extends Activity implements SensorEventListener {
         
         // Pause handler
         gameRunning = false;
+        
+        // Pause the music
+        musicPlayer.pause();
     }
 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {

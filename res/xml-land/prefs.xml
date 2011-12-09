@@ -22,8 +22,8 @@
     
     
     <CheckBoxPreference 
-        android:title="@string/items"  
         android:key="items"
+        android:title="@string/items"  
         android:summaryOff="@string/itemSumOff"
         android:summaryOn="@string/itemSumOn"
         android:defaultValue="true"
