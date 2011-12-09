@@ -37,15 +37,6 @@
 				android:layout_marginBottom="15dp" 
 				android:layout_marginLeft="10dp">
 			</Button>
-			
-			<Button 
-				android:id="@+id/btnhighscores" 
-				android:layout_width="wrap_content" 
-				android:layout_height="wrap_content" 
-				android:background="@drawable/highscore"
-				android:layout_marginBottom="15dp" 
-				android:layout_marginLeft="10dp">
-			</Button>
 			<Button 
 			    android:layout_width="fill_parent" 
 			    android:layout_height="wrap_content" 

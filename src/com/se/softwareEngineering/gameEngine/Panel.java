@@ -80,6 +80,9 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     	if (healthBarCurrLength - outlineWidth < 0) {
     		healthBarCurrRightPoint = healthBarMaxLeftPoint + outlineWidth;
     	}
+    	if (healthBarCurrRightPoint < (healthBarMaxLeftPoint + outlineWidth)) {
+    		healthBarCurrRightPoint = healthBarMaxLeftPoint + outlineWidth;
+    	}
     	
     	// Draw the health bar title
     	canvas.drawText("Health", leftCenterPoint, (barMargin + titleFontSize), titlePaint);
@@ -107,6 +110,9 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     	
     	// Fix length so its not negative
     	if (scoreBarCurrLength - outlineWidth < 0) {
+    		scoreBarCurrRightPoint = scoreBarMaxLeftPoint + outlineWidth;
+    	}
+    	if (scoreBarCurrRightPoint < (scoreBarMaxLeftPoint + outlineWidth)) {
     		scoreBarCurrRightPoint = scoreBarMaxLeftPoint + outlineWidth;
     	}
     	
