@@ -42,4 +42,10 @@ public class FinishLevel1 extends Activity{
 		
 	}
 
+	@Override
+	protected void onStop() {
+		super.onStop();
+		super.finish();
+	}
+
 }

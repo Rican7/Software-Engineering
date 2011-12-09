@@ -34,8 +34,8 @@ public class GameEngine extends Activity implements SensorEventListener {
 	// In game variables
 	static double scoreSpeedOrigin;
 	static double scoreSpeedMultiplier;
-	private int levelFinishScore;
-	private int gameScore;
+	static int levelFinishScore = 1000;
+	static int gameScore;
 	private boolean boostOn;
 
 	// Random number instance
@@ -69,9 +69,6 @@ public class GameEngine extends Activity implements SensorEventListener {
 		scoreSpeedOrigin = 1;
 		scoreSpeedMultiplier = 1;
     	gameScore = 0;
-    	
-    	// Set the difficulty of the game
-    	//setDifficulty(level);
 	}
     
     // Create main game loop logic
@@ -294,6 +291,9 @@ public class GameEngine extends Activity implements SensorEventListener {
 	    // Set defaults
 	    gravity[1] = 0;
 	    linear_acceleration[1] = 0;
+	    
+    	// Set the difficulty of the game
+    	//setDifficulty(level);
     }
     
     /** Called when the activity is first started. */
@@ -424,4 +424,19 @@ public class GameEngine extends Activity implements SensorEventListener {
 			Log.i("Score Log", "Game score is " + gameScore);
 		}
 	}
+    
+    // Public method to get the player's max health
+    public static int getScoreMax() {
+    	return levelFinishScore;
+    }
+    
+    // Public method to get the player's current health
+    public static int getScore() {
+    	return gameScore;
+    }
+
+    // Public method to get the player's health percentage
+    public static double getScorePercent() {
+    	return (double) ((double) gameScore / (double) levelFinishScore);
+    }
 }

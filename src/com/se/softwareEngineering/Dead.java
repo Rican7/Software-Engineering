@@ -39,4 +39,10 @@ public class Dead extends Activity{
 		
 	}
 
+	@Override
+	protected void onStop() {
+		super.onStop();
+		super.finish();
+	}
+
 }

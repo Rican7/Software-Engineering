@@ -133,9 +133,19 @@ public class playerElement {
     	return bounds;
     }
     
+    // Public method to get the player's max health
+    public int getHealthMax() {
+    	return healthMax;
+    }
+    
     // Public method to get the player's current health
     public int getPlayerHealth() {
     	return playerHealth;
+    }
+    
+    // Public method to get the player's health percentage
+    public double getPlayerPercent() {
+    	return (double) ((double) playerHealth / (double) healthMax);
     }
     
     // Public method to hurt the player
