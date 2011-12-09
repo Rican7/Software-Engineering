@@ -64,17 +64,17 @@ public class obstructionElement {
     	// Log
         if (randomNum == 0 || randomNum == 1) {
         	// Set properties
-        	healthEffect = -2;
+        	healthEffect = 6;
         }
         // Rock
         else if (randomNum == 2) {
         	// Set properties
-        	healthEffect = -10;
+        	healthEffect = 12;
         }
         // BIG rock
         else if (randomNum == 3) {
         	// Set properties
-        	healthEffect = -20;
+        	healthEffect = 20;
         }
     }
     
@@ -86,6 +86,9 @@ public class obstructionElement {
      * @param elapsedTime in ms.
      */
     public void animate(long elapsedTime) {
+    	// Proportionately effect the y-directional speed
+    	mSpeedY = mSpeedY * (double) GameEngine.scoreSpeedOrigin * (double) GameEngine.scoreSpeedMultiplier;
+    	
     	// Animate the y cooardinate
         mY += mSpeedY * (elapsedTime / 5f);
     }

@@ -26,12 +26,11 @@ public class Dead extends Activity{
 		});
 		
 		
-		//Main Menu button
+		// Level select button
 		Button btn_MainMenu = (Button) findViewById (R.id.btnMM);
 		btn_MainMenu.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				setContentView(R.layout.main);
 				finish();
 				
 			}

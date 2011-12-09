@@ -28,8 +28,10 @@ public class itemElement {
 		R.drawable.pizza_norm
     };
     private int itemDrawable;
+    private String itemType;
     private int healthEffect;
-    private int speedEffect;
+    private int timeEffect;
+    private double speedEffectMultiplier;
     
     // The bitmap image
     private Bitmap mBitmap;
@@ -73,13 +75,17 @@ public class itemElement {
     	// Energy drink
         if (randomNum == 0) {
         	// Set properties
+        	itemType = "boost";
         	healthEffect = 2;
-        	speedEffect = 10;
+        	speedEffectMultiplier = 1.5;
+        	timeEffect = 3;
         }
         else if (randomNum == 1) {
         	// Set properties
+        	itemType = "health";
         	healthEffect = 10;
-        	speedEffect = 0;
+        	speedEffectMultiplier = 1;
+        	timeEffect = 0;
         }
     }
     
@@ -93,6 +99,9 @@ public class itemElement {
     public void animate(long elapsedTime) {
     	// Make sure it doesn't "fall off the trail"
     	checkTrailBounds();
+    	
+    	// Proportionately effect the y-directional speed
+    	mSpeedY = mSpeedY * (double) GameEngine.scoreSpeedOrigin * (double) GameEngine.scoreSpeedMultiplier;
     	
     	// Animate the x and y cooardinates
     	mX += mSpeedX * (elapsedTime / 5f);
@@ -196,13 +205,23 @@ public class itemElement {
     	return false;
     }
     
+    // Get item type
+    public String getItemType() {
+    	return itemType;
+    }
+    
     // Get health effect
     public int getHealthEffect() {
     	return healthEffect;
     }
     
     // Get speed effect
-    public int getSpeedEffect() {
-    	return speedEffect;
+    public double getSpeedEffectMultiplier() {
+    	return speedEffectMultiplier;
+    }
+    
+    // Get time effect
+    public int getTimeEffect() {
+    	return timeEffect;
     }
 }

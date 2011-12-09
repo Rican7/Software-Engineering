@@ -16,6 +16,10 @@ public class playerElement {
     private int mSpeedX;
     private int mSpeedY;
     
+    // The in-game player variables
+    private int healthMax = 1;
+    private int playerHealth;
+    
     // The accelerometer multiplier (changes how fast he changes x direction)
     private double accelMult = 0.8;
 
@@ -24,14 +28,21 @@ public class playerElement {
     
     // Constructor
     public playerElement(Resources res, int x, int y) {
-        //Random rand = new Random();
+    	// Get the bitmap from the drawable
         mBitmap = BitmapFactory.decodeResource(res, R.drawable.character_norm_pos);
+        
+        // Set the starting position
         mX = x - mBitmap.getWidth() / 2;
         mY = (y*2) - mBitmap.getHeight();
+        
+        // Set the starting speed
         mSpeedX = 0;
-        //mSpeedY = rand.nextInt(7) - 3;
+        
+        // Set player health to max
+        playerHealth = healthMax;
     }
     
+    // Method to actually draw the contents to the screen
     public void doDraw(Canvas canvas) {
         canvas.drawBitmap(mBitmap, mX, mY, null);
     }
@@ -120,5 +131,25 @@ public class playerElement {
     	
     	// Return array
     	return bounds;
+    }
+    
+    // Public method to get the player's current health
+    public int getPlayerHealth() {
+    	return playerHealth;
+    }
+    
+    // Public method to hurt the player
+    public void hurtPlayer(int damagePoints) {
+    	playerHealth = playerHealth - damagePoints;
+    }
+    
+    // Public method to hurt the player
+    public void healPlayer(int healPoints) {
+    	if ((playerHealth + healPoints) > 100) {
+    		playerHealth = 100;
+    	}
+    	else {
+    		playerHealth = playerHealth + healPoints;
+    	}
     }
 }

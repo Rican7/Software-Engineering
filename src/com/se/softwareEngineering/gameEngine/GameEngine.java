@@ -5,6 +5,7 @@ import java.util.Random;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -17,15 +18,24 @@ import android.view.WindowManager;
 public class GameEngine extends Activity implements SensorEventListener {
 	
 	// Setup options
-	public static boolean debug = false;
-	static int gameSpeed = 20;
+	public final static boolean debug = false;
+	final static int gameSpeed = 20; // Don't CHANGE. Meant purely for the game looping speed
 	private int luckyNumber = 7; // Number used to calculate lotto... arbitrary
 	private int itemLottoChance = 200; // Between 0 and n
 	private int itemSpawnDelay = 200; // Relative to gamespeed delay. So itemSpawnDelay * gameSpeed = time in ms
 	private int timeLastItem = 0;
+	private int timeLastBoost = 0;
+	private int itemTimeEffect = 0; // in seconds
 	private int obstructionLottoChance = 100; // Between 0 and n
 	private int obstructionSpawnDelay = 50; // Relative to gamespeed delay. So obstructionSpawnDelay * gameSpeed = time in ms
 	private int obstructionLastItem = 0;
+	private final int scoreIncrement = 10;
+	
+	// In game variables
+	static double scoreSpeedOrigin;
+	static double scoreSpeedMultiplier;
+	private int levelFinishScore;
+	private int gameScore;
 
 	// Random number instance
 	private static Random random = new Random();
@@ -38,6 +48,7 @@ public class GameEngine extends Activity implements SensorEventListener {
 	
 	// Game running
 	Boolean gameRunning = false;
+	Boolean gameOver = false;
 	static Boolean surfaceCreated = false;
 	static int gameRunningTime = 0;
     
@@ -49,21 +60,37 @@ public class GameEngine extends Activity implements SensorEventListener {
     public static float[] gravity = new float[3];
     public static float[] linear_acceleration = new float[3];
     
-    public void run_game() {
-    	// Execute while the surface exists
-    	if (surfaceCreated) {
-    		itemController();
-    		obstructionController();
-    	}
+    // Constructor
+    public GameEngine(/*int level*/) {
+		super();
     	
+    	// Set the initial values of the game variables
+		scoreSpeedOrigin = 1;
+		scoreSpeedMultiplier = 1;
+    	gameScore = 0;
+    	
+    	// Set the difficulty of the game
+    	//setDifficulty(level);
+	}
+    
+    // Create main game loop logic
+    public void run_game() {
     	// Execute while the game is running
     	if (gameRunning) {
-    		checkIfGameOver();
+	    	// Execute while the surface exists
+	    	if (surfaceCreated) {
+	    		itemController();
+	    		obstructionController();
+	    		checkPlayerHealth();
+	    	}
+	    	
+	    	// Execute regardless of whether the canvas surface has been created
     		gameRunningTime();
+    		incrementScore();
     	}
     }
-    
-    /* Controls the items:
+
+	/* Controls the items:
      *	- Creating
      *	- Checking boundaries
      *	- Checking collisions with player
@@ -98,11 +125,27 @@ public class GameEngine extends Activity implements SensorEventListener {
 
             	// If any of the item elements collide with the player
             	if (currentItem.checkCollisionWithPlayer(gamePanel.player)) {
+            		// Heal the player
+            		gamePanel.player.healPlayer(currentItem.getHealthEffect());
+            		
+            		// Affect the player's speed (really just the speed of everything else)
+            		scoreSpeedMultiplier = currentItem.getSpeedEffectMultiplier();
+            		
+            		// Grab the time of the effect, in seconds
+            		itemTimeEffect = currentItem.getTimeEffect();
+            		
+            		if (currentItem.getItemType() == "boost") {
+            			// Make the boost only last a certain time
+            			timeLastBoost = gameRunningTime;
+            		}
+            		
             		// Remove the item
             		it.remove();
             		
             		// Debugging
             		Log.i("Item Log", "Item Collided with player at " + gameRunningTime);
+            		Log.i("Player Log", "Player healed for " + currentItem.getHealthEffect() + " points.");
+            		Log.i("Player Log", "Player health now at " + gamePanel.player.getPlayerHealth());
             	}
             	// If any of the item elements are out of bounds
             	else if (currentItem.checkOutOfBounds()) {
@@ -111,6 +154,11 @@ public class GameEngine extends Activity implements SensorEventListener {
             		
             		// Debugging
             		Log.i("Item Log", "Item Destroyed at " + gameRunningTime);
+            	}
+            	
+            	// Make sure that the speed of the game goes back to normal after the boost is done
+            	if ((gameRunningTime - timeLastBoost) > (itemTimeEffect * gameSpeed / 1000)) {
+            		scoreSpeedMultiplier = 1;
             	}
             }
         }
@@ -149,11 +197,19 @@ public class GameEngine extends Activity implements SensorEventListener {
 
             	// If any of the obstruction elements collide with the player
             	if (currentObstruction.checkCollisionWithPlayer(gamePanel.player)) {
+            		// Hurt the player
+            		gamePanel.player.hurtPlayer(currentObstruction.getHealthEffect());
+            		
+            		// Check to see if the player is dead or not
+    	    		checkPlayerHealth();
+            		
             		// Remove the item
             		it.remove();
             		
             		// Debugging
             		Log.i("Obstruction Log", "Obstruction Collided with player at " + gameRunningTime);
+            		Log.i("Player Log", "Player hurt for " + currentObstruction.getHealthEffect() + " points.");
+            		Log.i("Player Log", "Player health now at " + gamePanel.player.getPlayerHealth());
             	}
             	// If any of the obstruction elements are out of bounds
             	else if (currentObstruction.checkOutOfBounds()) {
@@ -167,7 +223,35 @@ public class GameEngine extends Activity implements SensorEventListener {
         }
     }
     
-    /** Called when the activity is first created. */
+    // Public method to check the player's health
+    private void checkPlayerHealth() {
+    	// Get the player's health
+    	int playerHealth = gamePanel.player.getPlayerHealth();
+    	
+    	// If the player's health reaches zero (or below), end the game
+    	if (playerHealth <= 0) {
+    		// Bring up the end game (failed) screen
+    		startActivity(new Intent("com.se.softwareEngineering.DEAD"));
+    		
+    		// Debugging
+    		Log.i("Game Log", "The player has died. Game over.");
+    		
+    		// Set the game to no longer run
+    		setGameOver();
+    	}
+    }
+    
+    // Called when the activity gets killed
+    @Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
+		// Let's do some cleanup
+		surfaceCreated = false;
+		gameRunningTime = 0;
+	}
+
+	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -194,9 +278,11 @@ public class GameEngine extends Activity implements SensorEventListener {
     public void onStart() {
     	super.onStart();
     	
+    	// Create the main game thread
     	mainGameThread = new Thread(new Runnable() {
 			public void run() {
-				while (gameRunning) {
+				// While the game is still running and the game ISN'T over
+				while (gameRunning && !gameOver) {
 					// Run the game loop
 					run_game();
 					
@@ -209,6 +295,8 @@ public class GameEngine extends Activity implements SensorEventListener {
 						}
 					}
 				}
+				
+				finish();
 			}
 		});
     }
@@ -217,9 +305,12 @@ public class GameEngine extends Activity implements SensorEventListener {
         super.onResume();
         aSensorManager.registerListener(this, aAccelerometer, SensorManager.SENSOR_DELAY_GAME);
         
-        // Resume handler
-        gameRunning = true;
-		mainGameThread.start();
+        // If the game ISN'T over
+        if (gameOver != true) {
+        	// Resume the game/thread
+        	gameRunning = true;
+			mainGameThread.start();
+        }
     }
 
     protected void onPause() {
@@ -255,17 +346,15 @@ public class GameEngine extends Activity implements SensorEventListener {
         }
     }
     
-    private void checkIfGameOver() {
-    	// If player has lost all of their health
-    	/*
-    	if (player2Lives.size() < 1 && player1Lives.size() < 1) {
-    		gameOver();
-    	}
-    	*/
+    // Method to set variables that flag the end of the game
+    private void setGameOver() {
+    	gameRunning = false;
+    	gameOver = true;
     }
     
+    // Method to increment the game running time and calculate the actual seconds of time for the log
     private void gameRunningTime() {
-    	// Incrememnt time
+    	// Increment time
 		gameRunningTime++;
 		
 		// Calculate actual game running time in seconds
@@ -280,5 +369,35 @@ public class GameEngine extends Activity implements SensorEventListener {
     // Set the surface created variable to true
 	public static void surfaceCreated() {
 		surfaceCreated = true;
+	}
+	
+	// Method to set the difficulty (score to beat and the speed), based on the level given
+	public void setDifficulty(int level) {
+		if (level == 1) {
+			levelFinishScore = 500;
+			scoreSpeedOrigin = 1;
+		}
+		else if (level == 2) {
+			levelFinishScore = 1000;
+			scoreSpeedOrigin = 1.2;
+		}
+		else if (level == 3) {
+			levelFinishScore = 2000;
+			scoreSpeedOrigin = 1.5;
+		}
+	}
+	
+	// Method to calculate and increment the score
+	public void incrementScore() {
+		// Make the score increment based on the speed multiplier, proportionately
+		double timeCalculator = gameRunningTime * (double) scoreSpeedOrigin * (double) scoreSpeedMultiplier;
+		
+		// Increment the score every quarter of a second (sort of... Java is bad at using modulus with doubles)
+		if ((timeCalculator % 12) == 0) {
+			gameScore += scoreIncrement;
+			
+			// Debugging
+			Log.i("Score Log", "Game score is " + gameScore);
+		}
 	}
 }
