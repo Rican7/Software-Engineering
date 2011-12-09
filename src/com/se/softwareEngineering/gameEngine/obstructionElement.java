@@ -21,14 +21,15 @@ public class obstructionElement {
     // Its speed
     private double mSpeedY;
     
-    // Item type variables
-    private final int[] itemDrawables = {
+    // Obstruction type variables
+    private final double obstructionSpeedMultiple = 0.25; 
+    private final int[] obstructionDrawables = {
 		R.drawable.log1_norm,
 		R.drawable.log2_norm,
 		R.drawable.rock1_norm,
 		R.drawable.rock2_norm
     };
-    private int itemDrawable;
+    private int obstructionDrawable;
     private int healthEffect;
     
     // The bitmap image
@@ -36,11 +37,11 @@ public class obstructionElement {
     
     // Constructor
     public obstructionElement(Resources res) {
-    	// Set the item type
-    	setItemType();
+    	// Set the obstruction type
+    	setObstructionType();
     	
     	// Get the bitmap from the drawable
-        mBitmap = BitmapFactory.decodeResource(res, itemDrawable);
+        mBitmap = BitmapFactory.decodeResource(res, obstructionDrawable);
         
         // Get a random starting x position based on the elements width and the panel's bounds
         float randomStartX = random.nextInt((int) (Panel.rightBound - Panel.leftBound - mBitmap.getWidth())) + Panel.leftBound;
@@ -49,17 +50,23 @@ public class obstructionElement {
         mX = randomStartX;
         mY = 0 - mBitmap.getHeight();
         
-        // Determine the vertical speed
-        mSpeedY = 1 * (0.25);
+        // Set/update the vertical speed
+        updateSpeedY();
     }
     
-    // Randomly generate an item type, and determine its properties
-    private void setItemType() {
+    // Method to set/update the vertical speed
+    private void updateSpeedY() {
+    	// Determine the vertical speed proportionately
+        mSpeedY = obstructionSpeedMultiple * (double) GameEngine.scoreSpeedOrigin * (double) GameEngine.scoreSpeedMultiplier;
+    }
+    
+    // Randomly generate an obstruction type, and determine its properties
+    private void setObstructionType() {
     	// Get a random int to determine
-    	int randomNum = random.nextInt(itemDrawables.length);
+    	int randomNum = random.nextInt(obstructionDrawables.length);
     	
-    	// Set item drawable resource
-    	itemDrawable = itemDrawables[randomNum];
+    	// Set obstruction drawable resource
+    	obstructionDrawable = obstructionDrawables[randomNum];
     	
     	// Log
         if (randomNum == 0 || randomNum == 1) {
@@ -86,14 +93,14 @@ public class obstructionElement {
      * @param elapsedTime in ms.
      */
     public void animate(long elapsedTime) {
-    	// Proportionately effect the y-directional speed
-    	mSpeedY = mSpeedY * (double) GameEngine.scoreSpeedOrigin * (double) GameEngine.scoreSpeedMultiplier;
+        // Set/update the vertical speed
+        updateSpeedY();
     	
     	// Animate the y cooardinate
         mY += mSpeedY * (elapsedTime / 5f);
     }
 
-    // Method to check the borders of the item to see if its out of bounds (no longer visible)
+    // Method to check the borders of the obstruction to see if its out of bounds (no longer visible)
     public boolean checkOutOfBounds() {
         if (mY - mBitmap.getHeight() >= Panel.mHeight) {
             return true;

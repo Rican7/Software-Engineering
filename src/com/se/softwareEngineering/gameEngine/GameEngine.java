@@ -26,16 +26,17 @@ public class GameEngine extends Activity implements SensorEventListener {
 	private int timeLastItem = 0;
 	private int timeLastBoost = 0;
 	private int itemTimeEffect = 0; // in seconds
-	private int obstructionLottoChance = 100; // Between 0 and n
+	private int obstructionLottoChance = 60; // Between 0 and n
 	private int obstructionSpawnDelay = 50; // Relative to gamespeed delay. So obstructionSpawnDelay * gameSpeed = time in ms
 	private int obstructionLastItem = 0;
-	private final int scoreIncrement = 10;
+	private final int scoreIncrement = 1;
 	
 	// In game variables
 	static double scoreSpeedOrigin;
 	static double scoreSpeedMultiplier;
 	private int levelFinishScore;
 	private int gameScore;
+	private boolean boostOn;
 
 	// Random number instance
 	private static Random random = new Random();
@@ -117,6 +118,26 @@ public class GameEngine extends Activity implements SensorEventListener {
     		}
     	}
     	
+    	// Make sure that the speed of the game goes back to normal after the boost is done
+    	if (boostOn) {
+    		// Calculate the time since the boost
+    		int timeSinceBoostStarted = gameRunningTime - timeLastBoost;
+    		
+    		// Calculate the duration of a proper boost
+    		int properBoostTime = (int) (itemTimeEffect * gameSpeed * 2.46);
+    		
+        	if (timeSinceBoostStarted > properBoostTime) {
+        		// Turn off boost
+        		boostOn = false;
+        		
+        		// Set speed back to normal
+        		scoreSpeedMultiplier = 1;
+    			
+        		// Debugging
+    			Log.i("Item Log", "Boost ended at " + gameRunningTime);
+        	}
+        }
+    	
     	// Loop through each existing element
     	synchronized (gamePanel.itemElements) {
             for (Iterator<itemElement> it = gamePanel.itemElements.iterator(); it.hasNext();) {
@@ -128,15 +149,22 @@ public class GameEngine extends Activity implements SensorEventListener {
             		// Heal the player
             		gamePanel.player.healPlayer(currentItem.getHealthEffect());
             		
-            		// Affect the player's speed (really just the speed of everything else)
-            		scoreSpeedMultiplier = currentItem.getSpeedEffectMultiplier();
-            		
             		// Grab the time of the effect, in seconds
             		itemTimeEffect = currentItem.getTimeEffect();
             		
+            		// If the item is a boost
             		if (currentItem.getItemType() == "boost") {
+	            		// Turn on boost
+	            		boostOn = true;
+	            		
+                		// Affect the player's speed (really just the speed of everything else)
+                		scoreSpeedMultiplier = currentItem.getSpeedEffectMultiplier();
+                		
             			// Make the boost only last a certain time
             			timeLastBoost = gameRunningTime;
+
+                		// Debugging
+            			Log.i("Item Log", "Boost started at " + timeLastBoost);
             		}
             		
             		// Remove the item
@@ -154,11 +182,6 @@ public class GameEngine extends Activity implements SensorEventListener {
             		
             		// Debugging
             		Log.i("Item Log", "Item Destroyed at " + gameRunningTime);
-            	}
-            	
-            	// Make sure that the speed of the game goes back to normal after the boost is done
-            	if ((gameRunningTime - timeLastBoost) > (itemTimeEffect * gameSpeed / 1000)) {
-            		scoreSpeedMultiplier = 1;
             	}
             }
         }
@@ -363,6 +386,7 @@ public class GameEngine extends Activity implements SensorEventListener {
 		// Log every 5 seconds (real time)
 		if ((actualRunningTime % 5.0) == 0) {
 			Log.i("Game Time", "Game has been running for " + (int)actualRunningTime + " seconds");
+			Log.i("Game Time", "Game running time: " + gameRunningTime);
 		}
     }
 

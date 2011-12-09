@@ -44,12 +44,6 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
         mPaint.setColor(Color.rgb(180, 180, 180));
         canvas.drawLine(leftBound, 0, leftBound, mHeight, mPaint);
         canvas.drawLine(rightBound, 0, rightBound, mHeight, mPaint);
-        
-        /*
-        // Draw perspective guide lines
-        canvas.drawLine(mWidth/5, 0, 0, mHeight, mPaint);
-        canvas.drawLine((mWidth*4/5), 0, mWidth, mHeight, mPaint);
-        */
 		
         // Draw items
 		synchronized (itemElements) {

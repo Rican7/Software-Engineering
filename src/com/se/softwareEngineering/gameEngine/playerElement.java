@@ -17,7 +17,7 @@ public class playerElement {
     private int mSpeedY;
     
     // The in-game player variables
-    private int healthMax = 1;
+    private int healthMax = 100;
     private int playerHealth;
     
     // The accelerometer multiplier (changes how fast he changes x direction)

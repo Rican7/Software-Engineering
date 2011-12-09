@@ -23,6 +23,7 @@ public class itemElement {
     private double mSpeedY;
     
     // Item type variables
+    private final double itemSpeedMultiple = 0.25; 
     private final int[] itemDrawables = {
 		R.drawable.energy_norm,
 		R.drawable.pizza_norm
@@ -60,8 +61,14 @@ public class itemElement {
         	mSpeedX = -(random.nextDouble() * (0.3));
         }
         
-        // Determine the vertical speed
-        mSpeedY = 1 * (0.25);
+        // Set/update the vertical speed
+        updateSpeedY();
+    }
+    
+    // Method to set/update the vertical speed
+    private void updateSpeedY() {
+    	// Determine the vertical speed proportionately
+        mSpeedY = itemSpeedMultiple * (double) GameEngine.scoreSpeedOrigin * (double) GameEngine.scoreSpeedMultiplier;
     }
     
     // Randomly generate an item type, and determine its properties
@@ -77,8 +84,8 @@ public class itemElement {
         	// Set properties
         	itemType = "boost";
         	healthEffect = 2;
-        	speedEffectMultiplier = 1.5;
-        	timeEffect = 3;
+        	speedEffectMultiplier = 4;
+        	timeEffect = 5;
         }
         else if (randomNum == 1) {
         	// Set properties
@@ -100,8 +107,8 @@ public class itemElement {
     	// Make sure it doesn't "fall off the trail"
     	checkTrailBounds();
     	
-    	// Proportionately effect the y-directional speed
-    	mSpeedY = mSpeedY * (double) GameEngine.scoreSpeedOrigin * (double) GameEngine.scoreSpeedMultiplier;
+    	// Set/update the speed
+        updateSpeedY();
     	
     	// Animate the x and y cooardinates
     	mX += mSpeedX * (elapsedTime / 5f);
