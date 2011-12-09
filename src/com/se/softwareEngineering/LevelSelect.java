@@ -1,5 +1,7 @@
 package com.se.softwareEngineering;
 
+import com.se.softwareEngineering.gameEngine.GameEngine;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,27 +35,23 @@ public class LevelSelect extends Activity{
 		
 		gridview.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+            	// Create new intent
+            	Intent intent = new Intent(LevelSelect.this, GameEngine.class);
+            	
+            	// Create new bundle
+                Bundle bundle = new Bundle();
+            	
             	//Goes to LevelStats need to look up statistics later dependent on level that is picked (position)
-            	if (position == 0) {
-            		startActivity(new Intent("com.se.softwareEngineering.gameEngine.GameEngine"));
-            		//set  variables here also for difficulty
-            		//speed - luck 
-            		//max score so you know when the level ends
-            		
-            	}
-            	else if (position ==1) {
-            		startActivity(new Intent("com.se.softwareEngineering.gameEngine.GameEngine"));
-            		//set  variables here also for difficulty
-            		//max score so you know when the level ends
-            		
-            	}
-            	else if (position ==2) {
-            		startActivity(new Intent("com.se.softwareEngineering.gameEngine.GameEngine"));
-            		//set  variables here also for difficulty
-            		//max score = 2345635634634645633654654634
+            	if (position == 0 || position == 1 || position == 2) {
+                   	// Add the level data to the bundle and add the bundle to the intent
+            		bundle.putInt("level", (position+1));
+                    intent.putExtras(bundle);
+                    
+                    // Start the actual activity (the game engine)
+                    startActivity(intent);
             	}
             	else {
-            		Toast.makeText(LevelSelect.this, "Comming Soon",Toast.LENGTH_SHORT).show();
+            		Toast.makeText(LevelSelect.this, "Coming Soon...",Toast.LENGTH_SHORT).show();
             	}
             }
         });

@@ -8,7 +8,8 @@
 	<!--
 	TODO: Change theme of app to full screen. "Theme.NoTitleBar.Fullscreen" 
 	-->
-	<application 
+	<application
+		android:label="@string/app_name"
 		android:icon="@drawable/icon" 
 		android:theme="@android:style/Theme.NoTitleBar">
 		<activity android:name=".SoftwareEngineeringActivity"
@@ -35,14 +36,6 @@
 			</intent-filter>
 		</activity>
 		
-		<activity android:name=".LevelStatistics" android:label="@string/app_name"
-			android:screenOrientation="landscape">
-			<intent-filter>
-				<action android:name="com.se.softwareEngineering.LEVELSTATS" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
-		
 		<activity 
 		    android:name=".PrefsActivity">
 			<intent-filter>
@@ -55,14 +48,6 @@
 			android:theme="@android:style/Theme.Dialog">
 			<intent-filter>
 				<action android:name="com.se.softwareEngineering.ABOUT" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>    
-		    
-		<activity android:name=".Level1" android:label="@string/app_name"
-			android:screenOrientation="landscape">
-			<intent-filter>
-				<action android:name="com.se.softwareEngineering.LEVEL1" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
@@ -78,23 +63,21 @@
         </activity>
         
 		<activity 
-			android:name=".Dead" 
-			android:label="@string/app_name"
+		    android:label="@string/app_name"
+			android:name=".Finish"
 			android:screenOrientation="landscape"
 			android:theme="@android:style/Theme.Dialog">
 			<intent-filter>
-				<action android:name="com.se.softwareEngineering.DEAD" />
+				<action android:name="com.se.softwareEngineering.Finish" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
 		
-		<activity 
-			android:name=".finishlevel1" 
-			android:label="@string/app_name"
+		<activity android:name=".Intstructions" android:label="@string/app_name"
 			android:screenOrientation="landscape"
 			android:theme="@android:style/Theme.Dialog">
 			<intent-filter>
-				<action android:name="com.se.softwareEngineering.FINISHLEVEL1" />
+				<action android:name="com.se.softwareEngineering.INSTRUCTIONS" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>

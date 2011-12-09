@@ -3,6 +3,7 @@ package com.se.softwareEngineering.gameEngine;
 import java.util.Iterator;
 import java.util.Random;
 
+import com.se.softwareEngineering.Finish;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -32,11 +33,13 @@ public class GameEngine extends Activity implements SensorEventListener {
 	private final int scoreIncrement = 1;
 	
 	// In game variables
+	private int level;
 	static double scoreSpeedOrigin;
 	static double scoreSpeedMultiplier;
-	static int levelFinishScore = 1000;
+	static int levelFinishScore = 1000; // Set a value as a default
 	static int gameScore;
 	private boolean boostOn;
+	private int gravityDirection;
 
 	// Random number instance
 	private static Random random = new Random();
@@ -85,6 +88,7 @@ public class GameEngine extends Activity implements SensorEventListener {
 	    	// Execute regardless of whether the canvas surface has been created
     		gameRunningTime();
     		incrementScore();
+    		checkGameWon();
     	}
     }
 
@@ -250,8 +254,20 @@ public class GameEngine extends Activity implements SensorEventListener {
     	
     	// If the player's health reaches zero (or below), end the game
     	if (playerHealth <= 0) {
-    		// Bring up the end game (failed) screen
-    		startActivity(new Intent("com.se.softwareEngineering.DEAD"));
+    		// Create new intent
+        	Intent intent = new Intent(GameEngine.this, Finish.class);
+        	
+        	// Create new bundle
+            Bundle bundle = new Bundle();
+            
+            // Add the level data to the bundle and add the bundle to the intent
+    		bundle.putBoolean("won", false);
+    		bundle.putInt("score", gameScore);
+    		bundle.putInt("level", level);
+            intent.putExtras(bundle);
+            
+            // Start the actual activity
+            startActivity(intent);
     		
     		// Debugging
     		Log.i("Game Log", "The player has died. Game over.");
@@ -280,6 +296,10 @@ public class GameEngine extends Activity implements SensorEventListener {
         gamePanel = new Panel(this);
         setContentView(gamePanel);
         
+        // Get the data from the bundle passed in the intent
+        Bundle bundle = getIntent().getExtras(); 
+	    int level = bundle.getInt("level", 1);
+        
         // Keep screen on
         this.getWindow().
         addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -293,7 +313,7 @@ public class GameEngine extends Activity implements SensorEventListener {
 	    linear_acceleration[1] = 0;
 	    
     	// Set the difficulty of the game
-    	//setDifficulty(level);
+    	setDifficulty(level);
     }
     
     /** Called when the activity is first started. */
@@ -367,6 +387,50 @@ public class GameEngine extends Activity implements SensorEventListener {
         	gravity[1] = alpha * gravity[1] + (1 - alpha) * (event.values[0] * -1);
 	        linear_acceleration[1] = event.values[0] - gravity[1];
         }
+        
+        // Check to see if the surface is created and the game is running, since the sensor's start first
+        if (surfaceCreated && gameRunning) {
+        	// Change the player element image based on the accelerometer
+	        if (gravity[1] >= -1 && gravity[1] <= 1 && gravityDirection != 0) {
+	        	gravityDirection = 0;
+	        	gamePanel.player.changeBitmap(gravityDirection);
+	        }
+	        else if (gravity[1] > 1 && gravityDirection != 1) {
+	        	gravityDirection = 1;
+	        	gamePanel.player.changeBitmap(gravityDirection);
+	        }
+	        else if (gravity[1] < -1 && gravityDirection != -1) {
+	        	gravityDirection = -1;
+	        	gamePanel.player.changeBitmap(gravityDirection);
+	        }
+        }
+    }
+    
+    // Method to check the score and see if the game is won
+    private void checkGameWon() {
+    	// If the score is more than or equal to the requirement for that level
+    	if (gameScore >= levelFinishScore) {
+    		// Create new intent
+        	Intent intent = new Intent(GameEngine.this, Finish.class);
+        	
+        	// Create new bundle
+            Bundle bundle = new Bundle();
+            
+            // Add the level data to the bundle and add the bundle to the intent
+    		bundle.putBoolean("won", true);
+    		bundle.putInt("score", gameScore);
+    		bundle.putInt("level", level);
+            intent.putExtras(bundle);
+            
+            // Start the actual activity
+            startActivity(intent);
+    		
+    		// Debugging
+    		Log.i("Game Log", "The player has won! Level " + level + " won.");
+    		
+    		// Set the game as "over"
+    		setGameOver();
+    	}
     }
     
     // Method to set variables that flag the end of the game
@@ -395,20 +459,35 @@ public class GameEngine extends Activity implements SensorEventListener {
 		surfaceCreated = true;
 	}
 	
-	// Method to set the difficulty (score to beat and the speed), based on the level given
+	// Method to set the difficulty (score to beat, speed, etc), based on the level given
 	public void setDifficulty(int level) {
+		// Change settings based on level
 		if (level == 1) {
-			levelFinishScore = 500;
-			scoreSpeedOrigin = 1;
+			levelFinishScore = 500; // Max score to beat
+			scoreSpeedOrigin = 1; // Speed and score multiplier
+			itemLottoChance = 200; // Between 0 and n
+			itemSpawnDelay = 200; // Relative to gamespeed delay. So itemSpawnDelay * gameSpeed = time in ms
+			obstructionLottoChance = 60; // Between 0 and n
+			obstructionSpawnDelay = 50; // Relative to gamespeed delay. So obstructionSpawnDelay * gameSpeed = time in ms
 		}
 		else if (level == 2) {
-			levelFinishScore = 1000;
-			scoreSpeedOrigin = 1.2;
+			levelFinishScore = 1500;
+			scoreSpeedOrigin = 1.5;
+			itemLottoChance = 250;
+			itemSpawnDelay = 200;
+			obstructionLottoChance = 40;
+			obstructionSpawnDelay = 35;
 		}
 		else if (level == 3) {
-			levelFinishScore = 2000;
+			levelFinishScore = 4000;
 			scoreSpeedOrigin = 1.5;
+			itemLottoChance = 300;
+			itemSpawnDelay = 200;
+			obstructionLottoChance = 20;
+			obstructionSpawnDelay = 30;
 		}
+		
+		this.level = level;
 	}
 	
 	// Method to calculate and increment the score

@@ -25,11 +25,19 @@ public class playerElement {
 
     // The bitmap image
     private Bitmap mBitmap;
+    private Bitmap bitmapLeft;
+    private Bitmap bitmapStraight;
+    private Bitmap bitmapRight;
     
     // Constructor
     public playerElement(Resources res, int x, int y) {
-    	// Get the bitmap from the drawable
-        mBitmap = BitmapFactory.decodeResource(res, R.drawable.character_norm_pos);
+    	// Get the bitmaps from the drawables, so they're in memory
+    	bitmapLeft = BitmapFactory.decodeResource(res, R.drawable.character_left_up);
+    	bitmapStraight = BitmapFactory.decodeResource(res, R.drawable.character_straight_up);
+    	bitmapRight = BitmapFactory.decodeResource(res, R.drawable.character_right_up);
+    	
+    	// Start with the main bitmap being the straight one
+    	mBitmap = bitmapStraight;
         
         // Set the starting position
         mX = x - mBitmap.getWidth() / 2;
@@ -40,6 +48,22 @@ public class playerElement {
         
         // Set player health to max
         playerHealth = healthMax;
+    }
+    
+    // Method to change the bitmap used by the player element
+    public void changeBitmap(int direction) {
+    	if (direction < 0) {
+    		mBitmap = bitmapLeft;
+    	}
+    	else if (direction == 0) {
+    		mBitmap = bitmapStraight;
+    	}
+    	else if (direction > 0) {
+    		mBitmap = bitmapRight;
+    	}
+    	else {
+    		mBitmap = bitmapStraight;
+    	}
     }
     
     // Method to actually draw the contents to the screen

@@ -2,33 +2,42 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+	android:padding="10dp"
+	android:layout_centerVertical="true" 
+	android:layout_centerHorizontal="true">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="This is a game designed by 2011 Software Engineering team of Plymouth State." />
-
+		android:gravity="center_horizontal"
+		android:padding="10dp"
+        android:text="This is an Android game designed by the 2011 Software Engineering team of Plymouth State University." />
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+		android:gravity="center_horizontal"
+		android:padding="5dp"
         android:text="Creators are:" />
-   <TextView
-        android:layout_width="wrap_content"
+   	<TextView
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+		android:gravity="center_horizontal"
         android:text="Austin Jennings" />
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+		android:gravity="center_horizontal"
         android:text="Jon Linden" />
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+		android:gravity="center_horizontal"
         android:text="Parker VanderNoot" />
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+		android:gravity="center_horizontal"
         android:text="Trevor Suarez" />
-
     
 </LinearLayout>
